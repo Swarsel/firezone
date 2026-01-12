@@ -324,7 +324,14 @@ if config_env() == :prod do
          Domain.Mailer,
          [
            adapter: env_var_to_config!(:outbound_email_adapter),
-           from_email: env_var_to_config!(:outbound_email_from)
+           from_email: env_var_to_config!(:outbound_email_from),
+           protocol: String.to_atom(System.get_env("OUTBOUND_EMAIL_SMTP_PROTOCOL")),
+           relay: System.get_env("OUTBOUND_EMAIL_SMTP_HOST"),
+           port: String.to_integer(System.get_env("OUTBOUND_EMAIL_SMTP_PORT")),
+           auth: [
+             username: System.get_env("OUTBOUND_EMAIL_SMTP_USERNAME"),
+             password: System.get_env("OUTBOUND_EMAIL_SMTP_PASSWORD")
+           ]
          ] ++ env_var_to_config!(:outbound_email_adapter_opts)
 
   config :workos, WorkOS.Client,
